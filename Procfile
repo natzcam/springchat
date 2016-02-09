@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -Dspring.profiles.active=HEROKU -jar target/springchat-1.0-SNAPSHOT.jar

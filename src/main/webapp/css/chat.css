@@ -1,0 +1,51 @@
+#user-list{
+    overflow-y: auto;
+}
+
+.list-group{
+    padding: 0px;
+}
+
+.list-group-item{
+    font-weight: bold;
+}
+
+#chat-tabs > li > a{
+    font-weight: bold;
+    padding: 10px 10px 10px 15px;
+}
+
+.chat-text-area{
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+#chat-tabs .close-btn{
+    opacity: 1;
+    filter: alpha(opacity=100);
+    margin-left: 15px;
+}
+
+#chat-tabs .close-btn:hover{
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.chat-form input[type=text], #global-form input[type=text]{
+    width: 90%;
+}
+
+.tab-pane{
+    padding: 10px 15px;
+}
+
+.blink-me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% { opacity: 0.0; }
+}

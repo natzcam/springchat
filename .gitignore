@@ -1,0 +1,9 @@
+logs
+target
+/.idea/
+*.iml
+nb-configuration.xml
+nbactions.xml
+.classpath
+.project
+.settings
