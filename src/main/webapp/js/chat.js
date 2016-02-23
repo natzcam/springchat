@@ -21,6 +21,7 @@ $(document).ready(function () {
         	//TODO remove tab when logout
              var user = JSON.parse(response.body);
              $('#user-list').find('#' + user.username).remove();
+             removeTab('#' + user.username + "-tab");
         });
 
         //click the user list
@@ -96,14 +97,18 @@ $(document).ready(function () {
         $('#chat-tabs').on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
             console.log(e.target);
             $(e.target).removeClass('blink-me');
-        })
+        });
 
         $('#chat-tabs').on('click', '.close-btn', function (e) {
             var tabPaneId = $(this).parent().attr("href");
-            $(this).parent().parent().remove();
+            removeTab(tabPaneId);
+        });
+        
+        function removeTab(tabPaneId){
+        	$('a[href=' + tabPaneId + ']').parent().remove();
             $('#chat-tabs a:last').tab('show');
             $(tabPaneId).remove();
-        })
+        }
 
     }, function(error) {
         console.log("STOMP protocol error " + error);
