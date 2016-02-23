@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         toAuthorities(account.getRoles()));
             } else {
                 throw new UsernameNotFoundException("could not find the user '"
-                        + account.getUsername() + "'");
+                        + username + "'");
             }
         };
     }
