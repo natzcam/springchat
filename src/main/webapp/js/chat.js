@@ -9,17 +9,26 @@ $(document).ready(function () {
         var username = frame.headers['user-name'];
 
         stomp.subscribe("/app/users", function(response) {
-            //TODO check existing
             $('#user-tmpl').tmpl(JSON.parse(response.body)).appendTo('#user-list');
         });
         
         stomp.subscribe("/topic/login", function(response){
-            $('#user-tmpl').tmpl(JSON.parse(response.body)).appendTo('#user-list');
+        	var user = JSON.parse(response.body);
+        	
+        	//check if user is already existing
+        	if(!$('#' + user.username).length && user.username != username){
+                $('#user-tmpl').tmpl(user).appendTo('#user-list');
+            }
         });
         
         stomp.subscribe("/topic/logout", function(response){
-        	//TODO remove tab when logout
              var user = JSON.parse(response.body);
+             
+             //if other session logouts, you logout
+             if(user.username == username){
+            	 window.location.href = '/logout';
+             }
+             
              $('#user-list').find('#' + user.username).remove();
              removeTab('#' + user.username + "-tab");
         });
