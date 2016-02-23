@@ -14,11 +14,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.socket.server.standard.SpringConfigurator;
-
-import demo.echo.spring.EchoService;
-
 /**
  * Created by nathaniel.a.camomot
  */

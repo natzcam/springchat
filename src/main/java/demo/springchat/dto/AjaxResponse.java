@@ -2,6 +2,7 @@ package demo.springchat.dto;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.BindingResult;

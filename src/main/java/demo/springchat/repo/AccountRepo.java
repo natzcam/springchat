@@ -5,10 +5,11 @@
  */
 package demo.springchat.repo;
 
-import demo.springchat.entity.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+
+import demo.springchat.entity.Account;
 
 /**
  *

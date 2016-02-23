@@ -1,6 +1,7 @@
 package demo.springchat.web;
 
-import demo.springchat.dto.User;
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -10,7 +11,7 @@ import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import java.security.Principal;
+import demo.springchat.dto.User;
 
 /**
  * Created by nathaniel.a.camomot on 1/11/2016.
