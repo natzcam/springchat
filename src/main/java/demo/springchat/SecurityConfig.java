@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
         .authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**", "/img/**", "/register", 
-                        "/echo_jsr.html", "/echo_spring.html", "/lubchanco.html", 
+                        "/echo_jsr.html", "/echo_spring.html", "/lubchenco_plotter.html", 
                         "/jsrecho", "/springecho",  "/springecho/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
