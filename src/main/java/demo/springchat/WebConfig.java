@@ -7,6 +7,7 @@ package demo.springchat;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
@@ -24,6 +25,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("account.index");
         registry.addViewController("/login").setViewName("account.login");
+    }
+    
+     @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        //registry.addMapping("/**").allowedOrigins("*").allowedHeaders("*").maxAge(3600);
     }
 
     //tiles config
