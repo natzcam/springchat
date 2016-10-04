@@ -17,20 +17,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import demo.springchat.dto.AccountCreateDTO;
 import demo.springchat.dto.AjaxResponse;
-import demo.springchat.dto.Login;
 import demo.springchat.entity.Account;
 import demo.springchat.repo.AccountRepo;
 import demo.springchat.util.ControllerException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import java.util.Date;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -50,14 +43,16 @@ public class AccountController {
     @Autowired
     private AccountRepo accountRepo;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    @RequestMapping(value = "register", method = RequestMethod.GET)
+    public ModelAndView registerAccountView() {
+        return new ModelAndView("account.register", "account", new AccountCreateDTO());
+    }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResponse registerAccount(@ModelAttribute("account") @Validated AccountCreateDTO accountCreateDTO,
-            BindingResult result) {
-
+                                        BindingResult result) {
+        
         if (result.hasErrors()) {
             return new AjaxResponse(result, messageSource);
         }
@@ -75,29 +70,5 @@ public class AccountController {
         }
 
         return new AjaxResponse(account.getUsername());
-    }
-
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public Login login(@RequestBody @Validated Login login) {
-
-        String username = login.getUsername();
-        Authentication auth;
-        try {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, login.getPassword());
-            auth = authenticationManager.authenticate(token);
-
-        } catch (Exception e) {
-            log.error("Login error", e);
-            throw new ControllerException("Login failed");
-        } finally {
-            login.clearPass();
-        }
-        System.out.println("auth: " + auth);
-
-        login.setToken(Jwts.builder().setSubject(username)
-                .claim("roles", "USER").setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
-        
-        return login;
     }
 }

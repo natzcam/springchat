@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lubchenco Plotter</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+          $('#aog').keyup(function () {
+
+              var aog = $(this).val();
+
+              /*        left: 69px; left: 513;
+               top: 21px;
+               top:512px;       */
+              var offsetX = 444 * ((aog - 24) / 19);
+              if (aog >= 38) {
+                  offsetX += 1;
+              }
+              if (aog == 42) {
+                  offsetX += 1;
+              }
+              $('#weightCrosshair').css('left', (69 + offsetX) + 'px');
+
+              /*        left: 57px; left: 496;
+               top: 8px;
+               top:546px;      */
+              offsetX = 439 * ((aog - 24) / 19);
+              if (aog >= 38) {
+                  offsetX += 1;
+              }
+              if (aog == 42) {
+                  offsetX += 1;
+              }
+              $('#lengthCrosshair').css('left', (57 + offsetX) + 'px');
+
+              /*        left: 59px; left: 503;
+               top: 20px;
+               top:418px;       */
+              offsetX = 444 * ((aog - 24) / 19);
+              if (aog >= 38) {
+                  offsetX += 1;
+              }
+              if (aog == 42) {
+                  offsetX += 1;
+              }
+              $('#headCrosshair').css('left', (59 + offsetX) + 'px');
+          });
+
+          $('#weight').keyup(function () {
+              var weight = $(this).val();
+              var offsetY = 491 * ((weight - 400) / 4200);
+
+              $('#weightCrosshair').css('top', 512 - offsetY + 'px');
+          });
+
+          $('#length').keyup(function () {
+              var length = $(this).val();
+              var offsetY = 538 * ((length - 31) / 23);
+
+              $('#lengthCrosshair').css('top', 546 - offsetY + 'px');
+          });
+
+          $('#head').keyup(function () {
+              var head = $(this).val();
+              var offsetY = 398 * ((head - 22) / 16);
+
+              $('#headCrosshair').css('top', 418 - offsetY + 'px');
+          });
+      });
+
+    </script>
+    <style type="text/css">
+      label {
+        display:block;
+        padding:10px;
+      }
+      .chart{
+        margin-bottom: 20px;
+        position:relative
+      }
+
+      .crosshair{
+        position:absolute;
+        width:30px;height:30px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div>
+      <div >
+        <div>
+          <div>
+            <h2>Lubchenco Plotter</h2>
+            <h5><i>For Dr. Lady Velayo with Love!!!</i></h5>
+          </div>
+          <label>AOG: <input id="aog" type="number" /></label>
+          <label>Weight: <input type="number" id="weight"/></label>
+          <label>Length: <input type="number" id="length"/></label>
+          <label>Head: <input type="number" id="head"/></label>
+        </div>
+        <div>
+          <div class="chart" style="width:559px;height:589px;background-image:url(img/weight.png)">
+            <img id="weightCrosshair" class="crosshair" src="img/crosshair.svg"/>
+          </div>
+          <div class="chart" style="width:539px;height:626px;background-image:url(img/length.png)">
+            <img id="lengthCrosshair" class="crosshair" src="img/crosshair.svg"/>
+          </div>
+          <div class="chart" style="width:540px;height:475px;background-image:url(img/head.png)">
+            <img id="headCrosshair" class="crosshair" src="img/crosshair.svg"/>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

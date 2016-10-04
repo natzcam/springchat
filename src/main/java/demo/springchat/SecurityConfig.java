@@ -26,9 +26,6 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 
 import demo.springchat.entity.Account;
 import demo.springchat.repo.AccountRepo;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 
 /**
  * @author nathaniel.a.camomot
@@ -53,10 +50,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().addHeaderWriter(
                         new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
-                .authorizeRequests()
-                .antMatchers("/webjars/**", "/css/**", "/js/**", "/img/**", "/register", "/login").permitAll()
-                .anyRequest().authenticated();
-        
+        .authorizeRequests()
+                .antMatchers("/webjars/**", "/css/**", "/js/**", "/img/**", "/register", 
+                        "/echo_jsr.html", "/echo_spring.html", "/lubchenco_plotter.html", 
+                        "/jsrecho", "/springecho",  "/springecho/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+        .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+        .logout()
+                .permitAll();
     }
 
     @Autowired
@@ -71,15 +76,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         + username + "'");
             }
         };
-    }
-    
-    @Bean
-    public FilterRegistrationBean jwtFilter() {
-        final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/api/*");
-
-        return registrationBean;
     }
 
     @Bean
