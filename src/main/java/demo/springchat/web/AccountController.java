@@ -47,6 +47,11 @@ public class AccountController {
     public ModelAndView registerAccountView() {
         return new ModelAndView("account.register", "account", new AccountCreateDTO());
     }
+    
+    @RequestMapping(value = "register", method = RequestMethod.GET)
+    public ModelAndView registerAccountView() {
+        return new ModelAndView("account.register", "account", new AccountCreateDTO());
+    }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
