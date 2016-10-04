@@ -17,13 +17,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import demo.springchat.dto.AccountCreateDTO;
 import demo.springchat.dto.AjaxResponse;
+import demo.springchat.dto.Login;
+import demo.springchat.dto.User;
 import demo.springchat.entity.Account;
 import demo.springchat.repo.AccountRepo;
 import demo.springchat.util.ControllerException;
+import java.security.Principal;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -32,48 +39,69 @@ import demo.springchat.util.ControllerException;
 @Controller
 public class AccountController {
 
-    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
+  private static final Logger log = LoggerFactory.getLogger(AccountController.class);
 
-    @Autowired
-    private MessageSource messageSource;
+  @Autowired
+  private MessageSource messageSource;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AccountRepo accountRepo;
+  @Autowired
+  private AccountRepo accountRepo;
 
-    @RequestMapping(value = "register", method = RequestMethod.GET)
-    public ModelAndView registerAccountView() {
-        return new ModelAndView("account.register", "account", new AccountCreateDTO());
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
+  @RequestMapping(value = "register", method = RequestMethod.POST)
+  @ResponseBody
+  public AjaxResponse registerAccount(@ModelAttribute("account") @Validated AccountCreateDTO accountCreateDTO,
+          BindingResult result) {
+
+    if (result.hasErrors()) {
+      return new AjaxResponse(result, messageSource);
     }
-    
-    @RequestMapping(value = "register", method = RequestMethod.GET)
-    public ModelAndView registerAccountView() {
-        return new ModelAndView("account.register", "account", new AccountCreateDTO());
+
+    Account account = accountRepo.findByUsername(accountCreateDTO.getUsername());
+
+    if (account == null) {
+      account = new Account();
+      account.setUsername(accountCreateDTO.getUsername());
+      account.setPassword(passwordEncoder.encode(accountCreateDTO.getPassword()));
+      account.setRoles(new String[]{"ROLE_USER"});
+      account = accountRepo.save(account);
+    } else {
+      throw new ControllerException(accountCreateDTO.getUsername() + " already taken");
     }
 
-    @RequestMapping(value = "register", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxResponse registerAccount(@ModelAttribute("account") @Validated AccountCreateDTO accountCreateDTO,
-                                        BindingResult result) {
-        
-        if (result.hasErrors()) {
-            return new AjaxResponse(result, messageSource);
-        }
+    return new AjaxResponse(account.getUsername());
+  }
 
-        Account account = accountRepo.findByUsername(accountCreateDTO.getUsername());
+  @RequestMapping(value = "login", method = RequestMethod.POST)
+  public User login(@RequestBody @Validated Login login) {
 
-        if (account == null) {
-            account = new Account();
-            account.setUsername(accountCreateDTO.getUsername());
-            account.setPassword(passwordEncoder.encode(accountCreateDTO.getPassword()));
-            account.setRoles(new String[]{"ROLE_USER"});
-            account = accountRepo.save(account);
-        } else {
-            throw new ControllerException(accountCreateDTO.getUsername() + " already taken");
-        }
+    String username = login.getUsername();
+    Authentication auth;
+    try {
+      UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, login.getPassword());
+      auth = authenticationManager.authenticate(token);
 
-        return new AjaxResponse(account.getUsername());
+    } catch (Exception e) {
+      log.error("Login error", e);
+      throw new ControllerException("Login failed");
+    } finally {
+      login.clearPass();
     }
+
+    return new User(username);
+  }
+
+  @RequestMapping(value = "me", method = RequestMethod.GET)
+  public User me(Principal principal) {
+    if (principal == null || StringUtils.isEmpty(principal.getName())) {
+      throw new ControllerException("Not logged in");
+    }
+
+    return new User(principal.getName());
+  }
 }
