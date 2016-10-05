@@ -29,6 +29,7 @@ import java.security.Principal;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -78,6 +79,7 @@ public class AccountController {
   }
 
   @RequestMapping(value = "login", method = RequestMethod.POST)
+  @ResponseBody
   public User login(@RequestBody @Validated Login login) {
 
     String username = login.getUsername();
@@ -85,7 +87,7 @@ public class AccountController {
     try {
       UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, login.getPassword());
       auth = authenticationManager.authenticate(token);
-
+      SecurityContextHolder.getContext().setAuthentication(auth);
     } catch (Exception e) {
       log.error("Login error", e);
       throw new ControllerException("Login failed");
@@ -97,6 +99,7 @@ public class AccountController {
   }
 
   @RequestMapping(value = "me", method = RequestMethod.GET)
+  @ResponseBody
   public User me(Principal principal) {
     if (principal == null || StringUtils.isEmpty(principal.getName())) {
       throw new ControllerException("Not logged in");

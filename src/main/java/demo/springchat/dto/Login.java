@@ -23,15 +23,6 @@ public class Login {
     public String username;
     @NotEmpty
     public String password;
-    public String token;
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
 
     public void clearPass() {
         this.password = null;
