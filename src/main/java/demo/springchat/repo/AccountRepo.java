@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import demo.springchat.entity.Account;
+import org.springframework.cache.annotation.Cacheable;
 
 /**
  *
@@ -19,6 +20,7 @@ public interface AccountRepo extends PagingAndSortingRepository<Account, Long> {
 
     public Account findByUsername(String username);
 
+    @Cacheable("accounts")
     public Page<Account> findByUsernameContains(String username, Pageable page);
 
     public Account findById(Long id);

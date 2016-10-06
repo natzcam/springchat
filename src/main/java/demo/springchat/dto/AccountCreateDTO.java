@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
 @ScriptAssert(lang = "javascript", script = "_this.password === _this.passwordRepeat")
 public class AccountCreateDTO {
 
-    @Pattern(regexp = "^[a-z]+[a-z0-9_-]{3,20}$")
+    @Pattern(regexp = "^[a-z]+[a-z\\.]{3,20}$")
     private String username;
 
     @Pattern(regexp= "^(?=\\S+$).{4,}$")

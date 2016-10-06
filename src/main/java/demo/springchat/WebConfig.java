@@ -5,8 +5,10 @@
  */
 package demo.springchat;
 
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -19,16 +21,18 @@ import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
  * @author nathaniel.a.camomot
  */
 @Configuration
+@EnableTransactionManagement
+@EnableCaching
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("account.register");
+        registry.addViewController("/").setViewName("account.index");
     }
-    
-     @Override
+
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
-        //registry.addMapping("/**").allowedOrigins("*").allowedHeaders("*").maxAge(3600);
+        registry.addMapping("/**").allowedOrigins("*").allowedHeaders("*").maxAge(3600);
     }
 
     //tiles config

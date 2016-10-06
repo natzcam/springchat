@@ -37,47 +37,48 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  AccountRepo accountRepo;
+    @Autowired
+    AccountRepo accountRepo;
 
-  @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsServiceImpl()).passwordEncoder(passwordEncoder());
-  }
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsServiceImpl()).passwordEncoder(passwordEncoder());
+    }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http
-            .csrf().disable()
-            .headers().frameOptions().disable()
-            .and().authorizeRequests()
-            .antMatchers("/webjars/**", "/css/**", "/js/**", "/img/**", "/register", "/login", "/me").permitAll()
-            .anyRequest().authenticated();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .headers().frameOptions().disable()
+                .and().authorizeRequests()
+                .antMatchers("/webjars/**", "/css/**", "/js/**", "/img/**", "/", "/register", "/login", "/me").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+                .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")
+                .anyRequest().authenticated();
+    }
 
-  }
+    @Autowired
+    private UserDetailsService userDetailsServiceImpl() {
+        return (String username) -> {
+            Account account = accountRepo.findByUsername(username);
+            if (account != null) {
+                return new User(account.getUsername(), account.getPassword(),
+                        toAuthorities(account.getRoles()));
+            } else {
+                throw new UsernameNotFoundException("could not find the user '"
+                        + username + "'");
+            }
+        };
+    }
 
-  @Autowired
-  private UserDetailsService userDetailsServiceImpl() {
-    return (String username) -> {
-      Account account = accountRepo.findByUsername(username);
-      if (account != null) {
-        return new User(account.getUsername(), account.getPassword(),
-                toAuthorities(account.getRoles()));
-      } else {
-        throw new UsernameNotFoundException("could not find the user '"
-                + username + "'");
-      }
-    };
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder;
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    PasswordEncoder encoder = new BCryptPasswordEncoder();
-    return encoder;
-  }
-
-  private Set<GrantedAuthority> toAuthorities(Set<String> roles) {
-    return roles.stream().map((String t) -> new SimpleGrantedAuthority(t)).collect(Collectors.toSet());
-  }
+    private Set<GrantedAuthority> toAuthorities(Set<String> roles) {
+        return roles.stream().map((String t) -> new SimpleGrantedAuthority(t)).collect(Collectors.toSet());
+    }
 
 }

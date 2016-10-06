@@ -13,6 +13,11 @@
         <put-attribute name="body" value="" />
         <put-attribute name="footer" value="/WEB-INF/include/footer.jsp" />
     </definition>
+    
+    <definition name="account.index" extends="layout.basic">
+        <put-attribute name="title" value="MetaChat" />
+        <put-attribute name="body" value="/WEB-INF/view/index.jsp" />
+    </definition>
 
     <definition name="account.register" extends="layout.basic">
         <put-attribute name="title" value="Register" />

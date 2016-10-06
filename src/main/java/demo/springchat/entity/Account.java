@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 
 /**
  * @author nathaniel camomot
@@ -26,12 +27,13 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "account")
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     protected Long id;
 
-    @Pattern(regexp = "^[a-z]+[a-z0-9_-]{3,20}$")
+    @Pattern(regexp = "^[a-z]+[a-z\\.]{3,20}$")
     @Column(name = "username", unique = true, nullable = false, length = 255)
     private String username;
 
@@ -42,6 +44,10 @@ public class Account {
     @Size(min = 1)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> roles = new HashSet<>();
+
+    @URL
+    @Column(name = "pic", nullable = false, length = 255)
+    private String pic;
 
     public Long getId() {
         return id;
@@ -83,5 +89,13 @@ public class Account {
         roles.clear();
         Collections.addAll(roles, roleArray);
     }
-    
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
 }
