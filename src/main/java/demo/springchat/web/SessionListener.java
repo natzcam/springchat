@@ -11,7 +11,7 @@ import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import demo.springchat.dto.User;
+import demo.springchat.res.User;
 
 /**
  * Created by nathaniel.a.camomot on 1/11/2016.

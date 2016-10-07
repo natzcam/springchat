@@ -2,8 +2,12 @@ package demo.springchat;
 
 import demo.springchat.entity.Account;
 import demo.springchat.repo.AccountRepo;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -55,5 +59,14 @@ public class ServerApp {
                 accountRepo.save(account);
             }
         };
+    }
+
+    @Bean
+    public Mapper mapper() {
+        DozerBeanMapper mapper = new DozerBeanMapper();
+        List<String> config = new ArrayList<>();
+        config.add("dozer.xml");
+        mapper.setMappingFiles(config);
+        return mapper;
     }
 }

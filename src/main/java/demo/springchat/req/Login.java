@@ -1,4 +1,4 @@
-package demo.springchat.dto;
+package demo.springchat.req;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -12,8 +12,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author user
  */
 public class Login {
-    public Login(){}
-    
+
+    public Login() {
+    }
+
     public Login(String name, String password) {
         this.username = name;
         this.password = password;

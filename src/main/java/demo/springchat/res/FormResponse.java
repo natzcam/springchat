@@ -1,4 +1,4 @@
-package demo.springchat.dto;
+package demo.springchat.res;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +12,13 @@ import org.springframework.validation.ObjectError;
 /**
  * Created by nathaniel.a.camomot on 11/12/2015.
  */
-public class AjaxResponse {
+public class FormResponse<T> {
 
     private boolean success;
     private Map<String, String> errors;
-    private Object payload;
+    private T payload;
 
-    public AjaxResponse(BindingResult result, MessageSource messageSource) {
+    public FormResponse(BindingResult result, MessageSource messageSource) {
         success = false;
 
         for (ObjectError error : result.getAllErrors()) {
@@ -37,7 +37,7 @@ public class AjaxResponse {
         }
     }
 
-    public AjaxResponse(Object payload) {
+    public FormResponse(T payload) {
         success = true;
         this.payload = payload;
     }
@@ -50,7 +50,7 @@ public class AjaxResponse {
         return success;
     }
 
-    public Object getPayload() {
+    public T getPayload() {
         return payload;
     }
 }

@@ -5,14 +5,15 @@
  */
 package demo.springchat.web;
 
-import demo.springchat.dto.AccountCreateDTO;
-import demo.springchat.dto.AjaxResponse;
-import demo.springchat.dto.Login;
-import demo.springchat.dto.User;
+import demo.springchat.req.AccountCreateDTO;
+import demo.springchat.res.FormResponse;
+import demo.springchat.req.Login;
+import demo.springchat.res.User;
 import demo.springchat.entity.Account;
 import demo.springchat.repo.AccountRepo;
 import demo.springchat.util.ControllerException;
 import java.security.Principal;
+import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class LoginController {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
+    private Mapper mapper;
+
+    @Autowired
     private MessageSource messageSource;
 
     @Autowired
@@ -55,18 +59,18 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @RequestMapping(value = "register", method = RequestMethod.GET)
-    public ModelAndView heatmap() {
+    public ModelAndView register() {
         ModelAndView mv = new ModelAndView("account.register", "account", new AccountCreateDTO());
         return mv;
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResponse registerAccount(@ModelAttribute("account") @Validated AccountCreateDTO accountCreateDTO,
+    public FormResponse registerAccount(@ModelAttribute("account") @Validated AccountCreateDTO accountCreateDTO,
             BindingResult result) {
 
         if (result.hasErrors()) {
-            return new AjaxResponse(result, messageSource);
+            return new FormResponse(result, messageSource);
         }
 
         Account account = accountRepo.findByUsername(accountCreateDTO.getUsername());
@@ -81,7 +85,7 @@ public class LoginController {
             throw new ControllerException(accountCreateDTO.getUsername() + " already taken");
         }
 
-        return new AjaxResponse(account.getUsername());
+        return new FormResponse(account.getUsername());
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
@@ -101,7 +105,7 @@ public class LoginController {
             login.clearPass();
         }
 
-        return new User(username);
+        return new User(auth.getName());
     }
 
     @RequestMapping(value = "me", method = RequestMethod.GET)

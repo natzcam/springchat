@@ -1,4 +1,4 @@
-package demo.springchat.dto;
+package demo.springchat.req;
 
 /**
  * Created by nathaniel.a.camomot on 1/13/2016.
