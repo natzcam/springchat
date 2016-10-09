@@ -18,10 +18,9 @@ import org.springframework.cache.annotation.Cacheable;
  */
 public interface AccountRepo extends PagingAndSortingRepository<Account, Long> {
 
-    @Cacheable("username")
     public Account findByUsername(String username);
 
-    @Cacheable("accounts")
+    @Cacheable("find_user_autocomplete")
     public Page<Account> findByUsernameContains(String username, Pageable page);
 
     public Account findById(Long id);
