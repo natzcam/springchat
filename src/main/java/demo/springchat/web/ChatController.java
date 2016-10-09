@@ -38,11 +38,11 @@ public class ChatController {
 
 
   @MessageMapping("/message.{url}")
-  public ChatMessage privateMessage(ChatMessage chatMessage, @DestinationVariable("url") URL url,
+  public ChatMessage privateMessage(ChatMessage chatMessage, @DestinationVariable("url") String url,
           Principal principal) {
 
     chatMessage.setSender(principal.getName());
-
+    
     return chatMessage;
   }
 }
